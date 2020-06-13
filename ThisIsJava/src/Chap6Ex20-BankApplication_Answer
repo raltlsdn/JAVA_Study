@@ -1,0 +1,152 @@
+import java.util.Scanner;
+
+// 기존 Account 클래스를 생성했던 상태라 원본 소스 그대로 Account20으로 이름만 변경해서 사용했음
+
+public class BankApplication {
+	private static Account20[] accountArray = new Account20[100];
+	private static Scanner scanner = new Scanner(System.in);
+
+	public static void main(String[] args) {
+		boolean run = true;
+		while (run) {
+			System.out.println("----------------------------------------------");
+			System.out.println("1. 계좌생성 | 2. 계좌목록 | 3. 예금 | 4. 출금 | 5. 종료");
+			System.out.println("----------------------------------------------");
+			System.out.print("선택 >");
+
+			int selectNo = scanner.nextInt();
+
+			if (selectNo == 1) {
+				createAccount();
+			} else if (selectNo == 2) {
+				accountList();
+			} else if (selectNo == 3) {
+				deposit();
+			} else if (selectNo == 4) {
+				withdraw();
+			} else if (selectNo == 5) {
+				run = false;
+			}
+		}
+		System.out.println("프로그램 종료");
+	}
+
+	// 계좌 생성하기
+	private static void createAccount() {
+		// 작성 위치
+		System.out.println("---------------");
+		System.out.println("계좌생성");
+		System.out.println("---------------");
+		
+		
+		// 입력값 저장
+		System.out.print("계좌번호 : ");
+		String ano = scanner.next();
+
+		System.out.print("계좌주 : ");
+		String owner = scanner.next();
+
+		System.out.print("초기입금액 : ");
+		int balance = scanner.nextInt();
+		
+		// 전반적으로 특정 배열을 객체에 넣어서 찾아야 한다는걸 몰라서 배열 인덱스로 찾으려하니 계속 null 예외가 뜸!
+		// 배열에 null로 처리가 되어있으면 인덱스 값을 통해서 필드를 비교하거나 하는 자체가 불가능한듯!
+		// 입력값으로 새 객체 생성
+		Account20 newAccount = new Account20(ano, owner, balance);
+		
+		// 배열 첫번째부터 확인해서 빈 배열이 확인되면 새 객체를 해당 배열에 대입
+		for (int i = 0; i < accountArray.length; i++) {
+			if (accountArray[i] == null) {
+				accountArray[i] = newAccount;
+				System.out.println("새 계좌가 생성되었습니다.");
+				break;
+
+			}
+
+		}
+	}
+
+	// 계좌 목록보기
+	private static void accountList() {
+		// 작성 위치
+		System.out.println("---------------");
+		System.out.println("계좌목록");
+		System.out.println("---------------");
+		
+		
+		// 배열 차례대로 accountList 라는 이름으로 객체에 대입해서 객체 값 출력
+		for (int i = 0; i < accountArray.length; i++) {
+			Account20 accountList = accountArray[i];
+			if (accountList != null) {
+				System.out.println(
+						accountList.getAno() + "    " + accountList.getOwner() + "    " + accountList.getBalance());
+			}
+		}
+	}
+
+
+	// 예금 출금은 마지막 대상 찾는 메소드 사용
+	// 예금하기
+	private static void deposit() {
+		// 작성 위치
+		System.out.println("---------------");
+		System.out.println("예금하기");
+		System.out.println("---------------");
+		
+		//입력값 받아서 저장
+		System.out.print("계좌번호 : ");
+		String ano = scanner.next();
+
+		System.out.print("예금액 : ");
+		int input = scanner.nextInt();
+		
+		// 리턴받은 배열을 객체에 대입해서 세터로 값을 변경
+		Account20 depositAccount = findAccount(ano);
+
+		if (depositAccount == null) {
+			System.out.println("계좌가 없습니다.");
+		} else {
+			depositAccount.setBalance(depositAccount.getBalance() + input);
+			System.out.println("결과 : 예금이 성공되었습니다.");
+		}
+	}
+
+	// 출금하기
+	private static void withdraw() {
+		// 작성 위치
+		System.out.println("---------------");
+		System.out.println("출금하기");
+		System.out.println("---------------");
+		
+		System.out.print("계좌번호 : ");
+		String ano = scanner.next();
+
+		System.out.print("출금액 : ");
+		int output = scanner.nextInt();
+
+		Account20 withdrawAccount = findAccount(ano);
+		if (withdrawAccount == null) {
+			System.out.println("계좌가 없습니다.");
+			return;
+		} else {
+			withdrawAccount.setBalance(withdrawAccount.getBalance() - output);
+			System.out.println("결과 : 출금이 성공되었습니다.");
+		}
+	}
+
+	// Account20 배열에서 ano와 동일한 Account 객체 찾기
+	// null 조건에 대한 처리 안해주면 null 예외 뜸
+	// 해당 계좌번호와 같은 값을 가지는 계좌번호를 찾아서 해당 배열을 리턴
+	private static Account20 findAccount(String ano) {
+		// 작성 위치
+		for (int i = 0; i < accountArray.length; i++) {
+			if (accountArray[i] != null) {
+				if (ano.equals(accountArray[i].getAno())) {
+					return accountArray[i];
+				}
+			}
+
+		}
+		return null;
+	}
+}
