@@ -21,31 +21,44 @@ public class Chap5Ex9 {
 				studentNum = scanner.nextInt();
 				
 			} else if(selectNo == 2) {
-				scores = new int[studentNum];
-				for(int i=0; i<studentNum; i++) {
-					System.out.print("scores["+i+"] > ");
-					scores[i] = scanner.nextInt();
+				if(scores == null && studentNum == 0) {
+					System.out.println("데이터가 입력되지 않았습니다.");
+				} else {
+					scores = new int[studentNum];
+					for(int i=0; i<studentNum; i++) {
+						System.out.print("scores["+i+"] > ");
+						scores[i] = scanner.nextInt();
+					}
 				}
 				
 			} else if(selectNo == 3) {
-				for(int i=0; i<scores.length; i++) {
-					System.out.println("scores["+i+"] = " + scores[i]);
+				if(scores == null) {
+					System.out.println("데이터가 입력되지 않았습니다.");
+				} else {
+					for(int i=0; i<scores.length; i++) {
+						System.out.println("scores["+i+"] = " + scores[i]);
+					}
 				}
+				
 				
 			} else if(selectNo == 4) {
 				int max = 0;
 				int sum = 0;
 				double avg;
-				for(int i =0; i<scores.length; i++) {
-					if(scores[i] >= max) {
-						max = scores[i];
+				if(scores == null) {
+					System.out.println("데이터가 입력되지 않았습니다.");
+				} else {
+					for(int i =0; i<scores.length; i++) {
+						if(scores[i] >= max) {
+							max = scores[i];
+						}
+						sum += scores[i];
 					}
-					sum += scores[i];
-				}
-				avg = (double) sum/scores.length;
-				System.out.println("총점 : " + sum);
-				System.out.println("평균 : " + avg);
-				System.out.println("최고점 : " + max);
+					avg = (double) sum/scores.length;
+					System.out.println("총점 : " + sum);
+					System.out.println("평균 : " + avg);
+					System.out.println("최고점 : " + max);
+				}	
 				
 			} else if(selectNo == 5) {
 				run = false;
